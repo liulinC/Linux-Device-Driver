@@ -6,7 +6,7 @@
 #include <linux/fs.h>
 #include <linux/wait.h>
 #include <linux/sched.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 
 #include "main.h"
 #include "fops.h"

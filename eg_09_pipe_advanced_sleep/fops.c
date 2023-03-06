@@ -4,9 +4,10 @@
 
 #include <linux/cdev.h>
 #include <linux/slab.h>
-#include <linux/sched.h>
+//#include <linux/sched.h>
+#include <linux/sched/signal.h>
 #include <linux/fs.h>
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 
 #include "main.h"
 #include "fops.h"

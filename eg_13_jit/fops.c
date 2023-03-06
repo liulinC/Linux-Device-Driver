@@ -12,6 +12,7 @@
 #include <linux/spinlock.h>
 #include <linux/seq_file.h>
 #include <linux/interrupt.h>
+#include <linux/sched/signal.h>
 
 #include <asm/hardirq.h>
 
@@ -74,7 +75,7 @@ int jit_fn(struct seq_file *m, void *p)
 		pr_debug("Known option\n");
 	}
 
-	seq_printf(m, "%9li %9li\n", j0, j1);
+	seq_printf(m, "%9li %9li delay: %9i\n", j0, j1, delay);
 
 	return 0;
 }
