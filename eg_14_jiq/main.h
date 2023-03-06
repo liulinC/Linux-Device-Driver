@@ -7,6 +7,7 @@
 struct jiq_dev {
 	wait_queue_head_t jiq_wait;
 	struct work_struct jiq_work;
+	struct workqueue_struct* wq;
 	struct delayed_work jiq_work_delay;
 	struct timer_list timer;
 	struct tasklet_struct tlet;

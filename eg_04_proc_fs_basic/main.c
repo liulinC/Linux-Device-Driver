@@ -12,12 +12,21 @@ static int proc_open(struct inode *inode, struct file *filp);
 static int proc_release(struct inode *inode, struct file *filp);
 
 static struct proc_dir_entry *parent = NULL;
+
+static struct file_operations proc_ops = {
+    .open    = proc_open,
+	.read    = seq_read,
+	.llseek   = seq_lseek,
+	.release = proc_release
+};
+
+/*
 static struct proc_ops proc_ops = {
 	.proc_open    = proc_open,
 	.proc_read    = seq_read,
 	.proc_lseek   = seq_lseek,
 	.proc_release = proc_release,
-};
+}; */
 
 static
 int proc_show(struct seq_file *m, void *v)
@@ -58,10 +67,11 @@ int __init m_init(void)
 		return -ENOMEM;
 
 	/* pass variable to open */
+    /*
 	if (!proc_create_data(PROC_FS_NAME_MUL, 0, parent,
 			      &proc_ops, (void*)PRINT_NR))
 		return -ENOMEM;
-
+*/
 	return 0;
 }
 

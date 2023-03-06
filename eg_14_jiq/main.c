@@ -72,7 +72,8 @@ void jiq_print_wq(struct work_struct *work)
 	if (!jiq_print(dev))
 		return;
 
-	schedule_work(&dev->jiq_work);
+    queue_work(jiq_dev->wq, &jiq_dev->jiq_work);
+	//schedule_work(&dev->jiq_work);
 }
 
 static
@@ -110,7 +111,8 @@ int jiq_read_wq(struct seq_file *m, void *v)
 	jiq_dev->delay = 0;
 
 	prepare_to_wait(&jiq_dev->jiq_wait, &wait, TASK_INTERRUPTIBLE);
-	schedule_work(&jiq_dev->jiq_work);
+	//schedule_work(&jiq_dev->jiq_work);
+    queue_work(jiq_dev->wq, &jiq_dev->jiq_work);
 	schedule();
 	finish_wait(&jiq_dev->jiq_wait, &wait);
 
@@ -209,11 +211,11 @@ int proc_release(struct inode *inode, struct file *filp)
 	return single_release(inode, filp);
 }
 
-static struct proc_ops proc_ops = {
-	.proc_open    = proc_open,
-	.proc_read    = seq_read,
-	.proc_lseek   = seq_lseek,
-	.proc_release = proc_release,
+static struct file_operations proc_ops = {
+	.open    = proc_open,
+	.read    = seq_read,
+	.llseek   = seq_lseek,
+	.release = proc_release,
 };
 
 static
@@ -225,6 +227,7 @@ int m_init(void)
 
 	INIT_WORK(&jiq_dev->jiq_work, jiq_print_wq);
 	INIT_DELAYED_WORK(&jiq_dev->jiq_work_delay, jiq_print_wq_delayd);
+    jiq_dev->wq = create_singlethread_workqueue("jitq");
 
 	init_waitqueue_head(&jiq_dev->jiq_wait);
 
@@ -246,6 +249,7 @@ void m_exit(void)
 	remove_proc_entry("jiqtimer", NULL);
 	remove_proc_entry("jiqtasklet", NULL);
 
+    destroy_workqueue(jiq_dev->wq);
 	kfree(jiq_dev);
 }
 

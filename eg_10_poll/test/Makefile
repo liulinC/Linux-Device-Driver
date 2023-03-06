@@ -1,2 +1,2 @@
 all:
-	gcc -std=gnu99 -o poll.out --static poll.c
+	gcc -std=gnu99 -o poll.out  poll.c
